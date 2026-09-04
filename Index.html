@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>Roteiro Gastronômico — São Paulo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: light dark;
+    --ink:#182219;
+    --on-dark:#F6F1E4;
+    --heading:#182219;
+    --ink-soft:#243026;
+    --cream:#F6F1E4;
+    --cream-alt:#EEE6D0;
+    --card:#FBF8EF;
+    --charcoal:#2B2A25;
+    --sage:#6E7A65;
+    --brass:#AD7C33;
+    --brass-soft:#D9BE8C;
+    --wine:#6E2A34;
+    --wine-soft:#F1E2E1;
+    --wine-border: rgba(110,42,52,0.2);
+    --line: rgba(24,34,25,0.14);
+    --gold-bg:#FBF3E4;
+    --gold-text:#6B4A15;
+    --confirmed-bg:#EAF0E5;
+    --confirmed-border:#BBD0AF;
+    --confirmed-text:#3D6444;
+    --radius: 10px;
+    --maxw: 640px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --heading:#F1ECDD;
+      --ink-soft:#D6D0BE;
+      --cream:#181C15;
+      --cream-alt:#232920;
+      --card:#20251C;
+      --charcoal:#E8E3D3;
+      --sage:#ABB59F;
+      --brass:#D3A559;
+      --wine:#E7A9AE;
+      --wine-soft:#3A1E22;
+      --wine-border: rgba(231,169,174,0.28);
+      --line: rgba(241,236,221,0.16);
+      --gold-bg:#3A2E14;
+      --gold-text:#E8C170;
+      --confirmed-bg:#1E2A1F;
+      --confirmed-border:#3D5940;
+      --confirmed-text:#A0CBA3;
+    }
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%; background:var(--cream);}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--charcoal);
+    font-family:'Inter',system-ui,sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    color:var(--heading);
+    letter-spacing:-0.01em;
+  }
+  a{color:var(--brass);}
+  img,svg{display:block;}
+  button{font-family:inherit;}
+
+  /* ---------- top nav ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    background:var(--ink);
+    color:var(--on-dark);
+    padding:14px 16px 0;
+  }
+  .topbar-title{
+    max-width:var(--maxw); margin:0 auto;
+    display:flex; align-items:baseline; justify-content:space-between;
+    padding-bottom:10px;
+  }
+  .topbar-title .kicker{
+    font-size:11px; letter-spacing:0.06em; color:var(--brass-soft); margin:0 0 2px;
+  }
+  .topbar-title h1{
+    font-size:19px; margin:0; color:var(--on-dark); font-weight:600;
+  }
+  .tabs{
+    max-width:var(--maxw); margin:0 auto;
+    display:flex; gap:4px; overflow-x:auto;
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+  }
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{
+    flex:0 0 auto;
+    background:transparent;
+    border:none;
+    color: rgba(246,241,228,0.62);
+    font-size:14px;
+    font-weight:500;
+    padding:9px 12px 12px;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    white-space:nowrap;
+  }
+  .tab:hover{ color:var(--on-dark); }
+  .tab.active{
+    color:var(--on-dark);
+    border-bottom-color:var(--brass);
+  }
+  .tab:focus-visible, button:focus-visible, .chip:focus-visible{
+    outline:2px solid var(--brass);
+    outline-offset:2px;
+  }
+
+  /* ---------- layout ---------- */
+  main{max-width:var(--maxw); margin:0 auto; padding:22px 16px 60px;}
+  .panel{display:none;}
+  .panel.active{display:block; animation:fade .35s ease;}
+  @keyframes fade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;} }
+  @media (prefers-reduced-motion: reduce){
+    .panel.active{ animation:none; }
+    *{ transition:none !important; }
+  }
+
+  p{margin:0 0 12px;}
+  .lede{ color:var(--ink-soft); font-size:15.5px; }
+  .section-heading{
+    font-size:22px; margin:0 0 4px;
+  }
+  .section-sub{
+    color:var(--sage); font-size:13.5px; margin:0 0 18px;
+  }
+
+  /* ---------- flight ticket ---------- */
+  .tickets{ display:flex; flex-direction:column; gap:10px; margin:18px 0 22px; }
+  .ticket{
+    position:relative;
+    background:var(--ink);
+    color:var(--on-dark);
+    border-radius:12px;
+    padding:14px 16px;
+    display:flex; align-items:center; gap:14px;
+    overflow:hidden;
+  }
+  .ticket::after{
+    content:'';
+    position:absolute; right:78px; top:0; bottom:0; width:0;
+    border-left:1px dashed rgba(246,241,228,0.28);
+  }
+  .ticket-route{ flex:1; min-width:0; }
+  .ticket-flightno{ font-size:11px; color:var(--brass-soft); letter-spacing:0.03em; margin-bottom:2px;}
+  .ticket-cities{ font-family:'Fraunces',serif; font-size:20px; font-weight:600; }
+  .ticket-cities small{ font-family:'Inter',sans-serif; font-weight:400; font-size:13px; color:rgba(246,241,228,.55); }
+  .ticket-date{ font-size:12.5px; color:rgba(246,241,228,.7); margin-top:3px;}
+  .ticket-times{ text-align:right; width:70px; flex-shrink:0; }
+  .ticket-times .t{ font-family:'Fraunces',serif; font-size:17px; font-weight:600; line-height:1.25;}
+  .ticket-times .lbl{ font-size:10px; color:rgba(246,241,228,.55); }
+  .ticket-note{ font-size:11.5px; color:var(--sage); margin:-6px 0 0; padding-left:2px;}
+
+  /* ---------- countdown ---------- */
+  .countdown{
+    background:var(--wine-soft);
+    border:1px solid var(--wine-border);
+    color:var(--wine);
+    border-radius:var(--radius);
+    padding:10px 14px;
+    font-size:13.5px;
+    font-weight:500;
+    margin-bottom:20px;
+  }
+
+  /* ---------- summary table ---------- */
+  table{ width:100%; border-collapse:collapse; font-size:13.5px; margin:6px 0 8px;}
+  th,td{ text-align:left; padding:9px 8px; border-bottom:1px solid var(--line); vertical-align:top;}
+  th{ font-weight:600; color:var(--ink-soft); font-size:12px; }
+  tr:last-child td{ border-bottom:none; }
+  .table-wrap{ overflow-x:auto; background:var(--card); border-radius:var(--radius); padding:4px 10px; border:1px solid var(--line);}
+
+  /* ---------- quick nav cards (overview) ---------- */
+  .quicknav{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:18px 0 26px;}
+  .qn-card{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:13px 14px; cursor:pointer; text-align:left;
+  }
+  .qn-card:hover{ border-color:var(--brass-soft); }
+  .qn-card .qn-day{ font-size:11px; color:var(--sage); margin-bottom:3px;}
+  .qn-card .qn-what{ font-family:'Fraunces',serif; font-weight:600; font-size:15.5px; color:var(--heading); line-height:1.25;}
+
+  /* ---------- timeline ---------- */
+  .timeline{ position:relative; padding-left:26px; margin:18px 0 26px;}
+  .timeline::before{
+    content:''; position:absolute; left:6px; top:4px; bottom:4px; width:2px;
+    background:var(--brass-soft);
+  }
+  .t-item{ position:relative; padding-bottom:18px; }
+  .t-item:last-child{ padding-bottom:0; }
+  .t-item::before{
+    content:''; position:absolute; left:-26px; top:3px; width:11px; height:11px;
+    border-radius:50%; background:var(--brass); border:2px solid var(--cream);
+  }
+  .t-time{ font-family:'Fraunces',serif; font-weight:600; font-size:14.5px; color:var(--heading);}
+  .t-text{ font-size:14px; color:var(--charcoal); margin-top:1px;}
+  .t-text.muted{ color:var(--sage); }
+
+  /* ---------- restaurant card ---------- */
+  .rcard{
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:18px; margin:0 0 22px;
+  }
+  .rcard-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:10px;}
+  .rcard-name{ font-size:20px; margin:0; }
+  .rcard-cuisine{ font-size:12.5px; color:var(--sage); margin-top:2px;}
+  .rcard-emoji{ font-size:26px; line-height:1; }
+  .meta-row{ display:flex; gap:9px; align-items:flex-start; font-size:13.5px; margin-bottom:7px; color:var(--charcoal); }
+  .meta-row svg{ flex-shrink:0; margin-top:2px; width:15px; height:15px; color:var(--brass); }
+  .meta-row .lbl2{ color:var(--sage); font-size:11.5px; display:block; }
+
+  /* ---------- routes (hotel -> restaurant) ---------- */
+  .routes{ background:var(--cream-alt); border-radius:var(--radius); padding:10px 12px; margin:12px 0; }
+  .routes-label{ font-size:11px; color:var(--sage); margin-bottom:7px; display:flex; align-items:center; gap:5px; }
+  .route-item{ display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:13px; padding:4px 0; }
+  .route-item + .route-item{ border-top:1px dashed var(--line); }
+  .route-hotel{ color:var(--ink-soft); font-weight:500; }
+  .route-hotel small{ display:block; color:var(--sage); font-weight:400; font-size:11px; }
+  .route-time{ color:var(--brass); font-weight:600; text-align:right; white-space:nowrap; }
+  .route-time small{ display:block; color:var(--sage); font-weight:400; font-size:11px; }
+
+  /* ---------- hotel cards (overview) ---------- */
+  .hotels{ display:flex; flex-direction:column; gap:10px; margin:16px 0 26px; }
+  .hotel-card{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:13px 14px; display:flex; gap:12px; align-items:flex-start;
+  }
+  .hotel-card svg{ flex-shrink:0; margin-top:2px; width:17px; height:17px; color:var(--brass); }
+  .hotel-card .h-who{ font-size:11px; color:var(--sage); margin-bottom:2px; }
+  .hotel-card .h-name{ font-family:'Fraunces',serif; font-weight:600; font-size:15.5px; color:var(--heading); }
+  .hotel-card .h-addr{ font-size:12.5px; color:var(--charcoal); margin-top:2px; }
+
+  .callout{
+    border-radius:var(--radius); padding:12px 14px; font-size:13.5px; margin:14px 0;
+    border:1px solid; line-height:1.5;
+  }
+  .callout.gold{ background:var(--gold-bg); border-color:var(--brass-soft); color:var(--gold-text);}
+  .callout.wine{ background:var(--wine-soft); border-color:var(--wine-border); color:var(--wine);}
+  .callout strong{ display:block; margin-bottom:3px; font-size:13px;}
+
+  .confirmed{
+    display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+    background:var(--confirmed-bg); border:1px solid var(--confirmed-border); color:var(--confirmed-text);
+    border-radius:999px; padding:8px 14px; font-size:12.5px; font-weight:600;
+    margin:12px 0;
+  }
+  .confirmed svg{ width:14px; height:14px; flex-shrink:0; }
+
+  .disclosure{ margin-top:12px; }
+  .disclosure summary{
+    cursor:pointer; font-size:13.5px; font-weight:600; color:var(--heading);
+    list-style:none; display:flex; align-items:center; gap:6px; padding:4px 0;
+  }
+  .disclosure summary::-webkit-details-marker{ display:none; }
+  .disclosure summary .chev{ transition:transform .2s ease; color:var(--brass); }
+  .disclosure[open] summary .chev{ transform:rotate(90deg); }
+  .disclosure-body{ font-size:13.5px; padding-top:6px; }
+  .disclosure-body ul{ margin:6px 0 4px; padding-left:18px; }
+  .disclosure-body li{ margin-bottom:5px; }
+  .price-tag{
+    display:inline-block; margin-top:8px; font-size:12.5px; background:var(--ink);
+    color:var(--on-dark); padding:4px 10px; border-radius:999px;
+  }
+
+  .divider-note{
+    font-size:13px; color:var(--sage); border-top:1px dashed var(--line); margin-top:22px; padding-top:14px;
+  }
+
+  /* ---------- checklist ---------- */
+  .checklist{ list-style:none; margin:0; padding:0; }
+  .checklist li{
+    display:flex; gap:11px; align-items:flex-start; padding:12px 0; border-bottom:1px solid var(--line);
+    font-size:14px;
+  }
+  .checklist li:last-child{ border-bottom:none; }
+  .cb{
+    flex-shrink:0; width:20px; height:20px; border-radius:5px; border:2px solid var(--brass);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; background:var(--card);
+    margin-top:1px;
+  }
+  .cb svg{ width:12px; height:12px; opacity:0; color:var(--on-dark); }
+  .cb.checked{ background:var(--brass); }
+  .cb.checked svg{ opacity:1; }
+  .checklist li.done .ck-text{ color:var(--sage); text-decoration:line-through; text-decoration-color:var(--brass-soft); }
+
+  footer{
+    max-width:var(--maxw); margin:0 auto; padding:10px 16px 40px; color:var(--sage); font-size:12.5px;
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">
+    <div>
+      <p class="kicker">MARVIN · FELIPE · CLÁUDIA · ISABELA</p>
+      <h1>São Paulo, 4–7 de setembro</h1>
+    </div>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-panel="overview">Visão geral</button>
+    <button class="tab" data-panel="sex">Sex 04/09</button>
+    <button class="tab" data-panel="sab">Sáb 05/09</button>
+    <button class="tab" data-panel="dom">Dom 06/09</button>
+    <button class="tab" data-panel="seg">Seg 07/09</button>
+    <button class="tab" data-panel="dicas">Dicas</button>
+  </nav>
+</div>
+
+<main>
+
+  <!-- ===================== OVERVIEW ===================== -->
+  <section class="panel active" id="overview">
+    <p class="lede">Quatro dias em São Paulo com foco total em gastronomia de alto nível — sem economizar na experiência, mas sempre saindo satisfeitos. Marvin e Felipe ficam nos Jardins; Cláudia e Isabela perto do Anhembi, por causa da Bienal do Livro. O grupo se reúne para as refeições combinadas.</p>
+
+    <div id="countdown" class="countdown">Carregando contagem regressiva…</div>
+
+    <div class="tickets">
+      <div class="ticket">
+        <div class="ticket-route">
+          <div class="ticket-flightno">G3 1113 · IDA</div>
+          <div class="ticket-cities">CWB <small>→</small> CGH</div>
+          <div class="ticket-date">Sexta, 04/09</div>
+        </div>
+        <div class="ticket-times">
+          <div class="t">13:10</div>
+          <div class="lbl">saída</div>
+          <div class="t" style="margin-top:6px;">14:15</div>
+          <div class="lbl">chegada</div>
+        </div>
+      </div>
+      <div class="ticket">
+        <div class="ticket-route">
+          <div class="ticket-flightno">VOLTA · TODOS OS 4</div>
+          <div class="ticket-cities">CGH <small>→</small> CWB</div>
+          <div class="ticket-date">Segunda, 07/09 (feriado)</div>
+        </div>
+        <div class="ticket-times">
+          <div class="t">16:25</div>
+          <div class="lbl">saída</div>
+          <div class="t" style="margin-top:6px;">17:30</div>
+          <div class="lbl">chegada</div>
+        </div>
+      </div>
+    </div>
+    <p class="ticket-note">Rota de volta (CGH → CWB) inferida a partir da viagem de ida — confirme o número do voo no seu bilhete.</p>
+
+    <h2 class="section-heading" style="margin-top:26px;">Hospedagem</h2>
+    <div class="hotels">
+      <div class="hotel-card">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21s-7-6.4-7-11.5A7 7 0 0 1 12 2a7 7 0 0 1 7 7.5C19 14.6 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+        <div>
+          <div class="h-who">Marvin e Felipe</div>
+          <div class="h-name">Intercity Jardins</div>
+          <div class="h-addr">Rua José Maria Lisboa, 555 — Jardim Paulista, São Paulo</div>
+        </div>
+      </div>
+      <div class="hotel-card">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21s-7-6.4-7-11.5A7 7 0 0 1 12 2a7 7 0 0 1 7 7.5C19 14.6 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+        <div>
+          <div class="h-who">Cláudia e Isabela</div>
+          <div class="h-name">Holiday Inn Parque Anhembi</div>
+          <div class="h-addr">Rua Prof. Milton Rodrigues, 100 — Santana, São Paulo</div>
+        </div>
+      </div>
+    </div>
+    <p class="ticket-note" style="margin-bottom:20px;">Os dois hotéis ficam em regiões opostas da cidade — Jardins é zona centro-oeste, Anhembi é zona norte. Isso pesa nos tempos de deslocamento até cada restaurante, detalhados dia a dia abaixo.</p>
+
+    <h2 class="section-heading">O roteiro, dia a dia</h2>
+    <div class="quicknav">
+      <button class="qn-card" data-goto="sex"><div class="qn-day">Sex · Jantar</div><div class="qn-what">🥩 Arturito</div></button>
+      <button class="qn-card" data-goto="sab"><div class="qn-day">Sáb · Jantar</div><div class="qn-what">🍕 Leggera</div></button>
+      <button class="qn-card" data-goto="dom"><div class="qn-day">Dom · Almoço</div><div class="qn-what">🥐 D'Heaven</div></button>
+      <button class="qn-card" data-goto="dom"><div class="qn-day">Dom · Jantar</div><div class="qn-what">🍣 OUE Sushi</div></button>
+      <button class="qn-card" data-goto="seg" style="grid-column:1/-1;"><div class="qn-day">Seg · Almoço de despedida</div><div class="qn-what">🍝 Paparoto Cucina</div></button>
+    </div>
+
+    <h2 class="section-heading">Resumo em uma tabela</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Dia</th><th>Refeição</th><th>Restaurante</th><th>Cozinha</th></tr></thead>
+        <tbody>
+          <tr><td>Sex 04/09</td><td>Jantar</td><td>Arturito</td><td>Argentina/mediterrânea</td></tr>
+          <tr><td>Sáb 05/09</td><td>Jantar</td><td>Leggera (Perdizes)</td><td>Pizza napolitana</td></tr>
+          <tr><td>Dom 06/09</td><td>Almoço</td><td>D'Heaven</td><td>Francesa contemporânea</td></tr>
+          <tr><td>Dom 06/09</td><td>Jantar</td><td>OUE Sushi (Bourbon)</td><td>Japonesa premium</td></tr>
+          <tr><td>Seg 07/09</td><td>Almoço</td><td>Paparoto (JK Iguatemi)</td><td>Italiana contemporânea</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================== SEXTA ===================== -->
+  <section class="panel" id="sex">
+    <h2 class="section-heading">Dia 1 · Sexta-feira, 04/09</h2>
+    <p class="section-sub">Chegada em São Paulo e jantar de reencontro no Arturito</p>
+
+    <div class="timeline">
+      <div class="t-item"><div class="t-time">14h15</div><div class="t-text">Pouso em Congonhas (voo G3 1113)</div></div>
+      <div class="t-item"><div class="t-time">14h45–15h15</div><div class="t-text">Uber até o Intercity Jardins <span class="muted">(~15–20 min, ~8 km)</span></div></div>
+      <div class="t-item"><div class="t-time">15h15–16h00</div><div class="t-text">Check-in rápido, deixar as malas</div></div>
+      <div class="t-item"><div class="t-time">16h00–18h20</div><div class="t-text muted">Tempo livre — caminhada pelos Jardins, sem pressa</div></div>
+      <div class="t-item"><div class="t-time">18h20</div><div class="t-text">Cláudia e Isabela saem do Holiday Inn Anhembi <span class="muted">(~30–40 min até o Arturito)</span></div></div>
+      <div class="t-item"><div class="t-time">18h45</div><div class="t-text">Marvin e Felipe saem do hotel <span class="muted">(~2 km até o Arturito)</span></div></div>
+      <div class="t-item"><div class="t-time">19h00</div><div class="t-text"><strong>Reserva confirmada</strong> — todos chegam e sentam juntos</div></div>
+      <div class="t-item"><div class="t-time">19h–21h30/22h</div><div class="t-text">"Almojanta" tranquila, sem pressa</div></div>
+    </div>
+
+    <div class="rcard">
+      <div class="rcard-top">
+        <div>
+          <h3 class="rcard-name">Arturito</h3>
+          <div class="rcard-cuisine">Chef Paola Carosella · clássica argentina/mediterrânea</div>
+        </div>
+        <div class="rcard-emoji">🥩</div>
+      </div>
+
+      <div class="meta-row">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21s-7-6.4-7-11.5A7 7 0 0 1 12 2a7 7 0 0 1 7 7.5C19 14.6 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+        <div><span class="lbl2">Endereço (mudou em 2024 — não é mais Pinheiros)</span>Rua Chabad, 124 — Jardim Paulista, São Paulo</div>
+      </div>
+      <div class="meta-row">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        <div><span class="lbl2">Horário sexta</span>Almoço 12h–15h · Jantar 19h–23h30</div>
+      </div>
+      <div class="meta-row">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.34 1.79.65 2.65a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.43-1.43a2 2 0 0 1 2.11-.45c.86.31 1.75.53 2.65.65A2 2 0 0 1 22 16.92z"/></svg>
+        <div><span class="lbl2">Contato</span>(11) 95699-9330 · reserva pelo site arturito.com.br</div>
+      </div>
+
+      <div class="confirmed">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>
+        Reserva confirmada · 04/09, 19h00 · 4 pessoas · Salão Principal
+      </div>
+
+      <div class="routes">
+        <div class="routes-label">🚗 Tempo estimado de Uber até o Arturito</div>
+        <div class="route-item">
+          <span class="route-hotel">Intercity Jardins<small>Marvin e Felipe</small></span>
+          <span class="route-time">~8–12 min<small>~2 km</small></span>
+        </div>
+        <div class="route-item">
+          <span class="route-hotel">Holiday Inn Anhembi<small>Cláudia e Isabela</small></span>
+          <span class="route-time">~30–40 min<small>~13 km</small></span>
+        </div>
+      </div>
+      <p style="font-size:12.5px; color:var(--sage); margin-top:-6px;">Saindo nos horários acima, os dois grupos chegam praticamente juntos, por volta das 18h55–19h00.</p>
+
+      <details class="disclosure" open>
+        <summary><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg> Melhores pratos, entradas e drinks</summary>
+        <div class="disclosure-body">
+          <p style="margin:2px 0 8px;"><strong>Entradas</strong> (a casa tem uma lista longa de entradas e uma bem mais curta de principais — a boa estratégia aqui é pedir várias entradas para o meio da mesa):</p>
+          <ul>
+            <li>Terrine da casa, com porco, pato, pistache e mostarda à l'ancienne</li>
+            <li>Coquetel de camarão fresco, salsão, maçã e molho de pimenta fresca</li>
+            <li>Empanadas</li>
+          </ul>
+          <p style="margin:10px 0 8px;"><strong>Pratos principais</strong></p>
+          <ul>
+            <li>Bife de quadril Bonsmara, assado em caixa de ferro</li>
+            <li>Peixe-sapo (monkfish) ou polvo</li>
+          </ul>
+          <p style="margin:10px 0 8px;"><strong>Drinks</strong> — o bar do Arturito é um dos pontos altos da casa, com clima retrô de coquetelaria clássica</p>
+          <ul>
+            <li>Old Fashioned — servido em copo baixo com gelo maciço, casca de cítrico e cerejas ao marrasquino na espadinha; é o pedido mais lembrado por quem já foi</li>
+            <li>Vale perguntar pelos autorais do dia — a carta muda com frequência</li>
+          </ul>
+          <p style="margin:10px 0 8px;"><strong>Sobremesa</strong></p>
+          <ul>
+            <li>Pavlova, panna cotta ou choux</li>
+          </ul>
+          <p style="margin:10px 0 0; font-size:12.5px; color:var(--sage);"><strong>Conselho:</strong> não peça um prato principal por pessoa de cara — comecem com 3–4 entradas para o meio da mesa e decidam os principais depois, com calma. É assim que a casa funciona melhor.</p>
+          <span class="price-tag">≈ R$250–400 por pessoa</span>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ===================== SÁBADO ===================== -->
+  <section class="panel" id="sab">
+    <h2 class="section-heading">Dia 2 · Sábado, 05/09</h2>
+    <p class="section-sub">Dia livre até a noite, quando todo mundo se reúne na Leggera</p>
+
+    <p>Marvin e Felipe ficam por conta própria de manhã e à tarde — sem compromisso gastronômico marcado. Cláudia e Isabela passam o dia na Bienal do Livro e seguem direto de lá para o jantar, sem passar pelo hotel.</p>
+
+    <div class="rcard">
+      <div class="rcard-top">
+        <div>
+          <h3 class="rcard-name">Leggera Pizza Napoletana</h3>
+          <div class="rcard-cuisine">Sede de Perdizes (unidade original, desde 2013) · pizza napolitana certificada AVPN</div>
+        </div>
+        <div class="rcard-emoji">🍕</div>
+      </div>
+
+      <div class="meta-row">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21s-7-6.4-7-11.5A7 7 0 0 1 12 2a7 7 0 0 1 7 7.5C19 14.6 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+        <div><span class="lbl2">Endereço</span>Rua Diana, 80 — Perdizes, São Paulo</div>
+      </div>
+      <div class="meta-row">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        <div><span class="lbl2">Horário sábado</span>18h00 às 23h30</div>
+      </div>
+      <div class="meta-row">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.34 1.79.65 2.65a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.43-1.43a2 2 0 0 1 2.11-.45c.86.31 1.75.53 2.65.65A2 2 0 0 1 22 16.92z"/></svg>
+        <div><span class="lbl2">Contato</span>(11) 3862-2581</div>
+      </div>
+
+      <div class="routes">
+        <div class="routes-label">🚗 Tempo estimado de Uber até a Leggera (Perdizes)</div>
+        <div class="route-item">
+          <span class="route-hotel">Intercity Jardins<small>Marvin e Felipe</small></span>
+          <span class="route-time">~15–20 min<small>~6,5 km</small></span>
+        </div>
+        <div class="route-item">
+          <span class="route-hotel">Bienal do Livro (Anhembi)<small>Cláudia e Isabela</small></span>
+          <span class="route-time">~20–25 min<small>~10,5 km</small></span>
+        </div>
+      </div>
+      <p style="font-size:12.5px; color:var(--sage); margin-top:-6px;">Cláudia e Isabela saem direto do Anhembi, sem passar pelo hotel — o trajeto é parecido com o do hotel, já que fica na mesma região.</p>
+
+      <div class="confirmed">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>
+        Plano confirmado · chegando por ordem de fila às 18h00, sem reserva
+      </div>
+
+      <div class="callout wine">
+        <strong>❌ Não aceita reservas — leia com atenção</strong>
+        3º lugar no ranking mundial 50 Top Pizza 2025, casa pequena (55 lugares): é a parada mais delicada do roteiro.
+        <ul style="margin:8px 0 0; padding-left:18px;">
+          <li><strong>Todo o grupo precisa chegar junto</strong>, no horário de abertura (18h) ou pouco antes (17h45) — a casa só senta quando 100% do grupo está presente.</li>
+          <li><strong>Cláudia e Isabela (saindo da Bienal):</strong> saiam por volta de <strong>17h15</strong> para chegar com folga por volta de 17h35–17h40.</li>
+          <li><strong>Marvin e Felipe:</strong> saiam por volta de <strong>17h20</strong> — chegam praticamente junto.</li>
+          <li>Sábado é o dia mais cheio da semana — chegar exatamente na abertura é a forma mais confiável de evitar fila.</li>
+          <li>Em noites cheias, a massa pode acabar por volta das 22h e a casa fecha — mais um motivo para não deixar para depois.</li>
+        </ul>
+      </div>
+
+      <details class="disclosure" open>
+        <summary><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg> Melhores pratos, entradas e drinks</summary>
+        <div class="disclosure-body">
+          <p style="margin:2px 0 8px;"><strong>Entrada</strong></p>
+          <ul>
+            <li>Misto Campano — mix de clássicos da Campania: croquete de batata, bolinho de risoto, focaccia e salada caprese, feito para o meio da mesa</li>
+          </ul>
+          <p style="margin:10px 0 8px;"><strong>Pizzas (individuais — uma por pessoa, não se divide)</strong></p>
+          <ul>
+            <li>Margherita Verace ou Marinara — os clássicos certificados AVPN, o "controle de qualidade" da casa</li>
+            <li>Affresco di Pompei — pizza branca de ricota, pecorino, figos, presunto e toque agridoce de tâmara</li>
+            <li>Salsiccia e Friarielli — mozzarella de búfala, friarielli (verdura importada da Itália) e linguiça fresca assada</li>
+            <li>Capricciosa ou Puglia (tomate cereja, azeitona preta, parmigiano, burrata e taralli), para quem quiser fugir do óbvio</li>
+          </ul>
+          <p style="margin:10px 0 8px;"><strong>Drinks</strong></p>
+          <ul>
+            <li>Um tinto italiano leve (estilo Chianti) é o pareamento clássico com pizza napolitana e costuma estar na carta</li>
+            <li>Vale perguntar se há cerveja artesanal do dia — boa opção mais refrescante para dividir a mesa</li>
+          </ul>
+          <p style="margin:10px 0 8px;"><strong>Sobremesa</strong></p>
+          <ul>
+            <li>Cannoli, recheado na hora com ricota fresca, laranja cristalizada e chocolate amargo</li>
+            <li>Pastiera, se estiver disponível no dia — clássico napolitano menos óbvio que o cannoli</li>
+          </ul>
+          <p style="margin:10px 0 0; font-size:12.5px; color:var(--sage);"><strong>Conselho:</strong> aqui vale pedir entrada, pizza, sobremesa e até o cafezinho para fechar — é uma daquelas casas em que a experiência completa compensa, não só a pizza.</p>
+          <span class="price-tag">≈ R$150–220 por pessoa</span>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ===================== DOMINGO ===================== -->
+  <section class="panel" id="dom">
+    <h2 class="section-heading">Dia 3 · Domingo, 06/09</h2>
+    <p class="section-sub">O grande dia gastronômico — bistrô francês no almoço, omakase premium à noite</p>
+
+    <div class="rcard">
+      <div class="rcard-top">
+        <div>
+          <h3 class="rcard-name">D'Heaven</h3>
+          <div class="rcard-cuisine">Chef Heaven Delhaye · francesa contemporânea, toques de brasa</div>
+        </div>
+        <div class="rcard-emoji">🥐</div>
+      </div>
+
+      <div class="meta-row">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21s-7-6.4-7-11.5A7 7 0 0 1 12 2a7 7 0 0 1 7 7.5C19 14.6 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+        <div><span class="lbl2">Endereço</span>Rua Padre João Manuel, 1105 — Jardins, São Paulo</div>
+      </div>
+      <div class="meta-row">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        <div><span class="lbl2">Horário domingo</span>12h00 às 17h00, contínuo (sem intervalo)</div>
+      </div>
+
+      <div class="routes">
+        <div class="routes-label">🚗 Tempo estimado de Uber até o D'Heaven</div>
+        <div class="route-item">
+          <span class="route-hotel">Intercity Jardins<small>Marvin e Felipe</small></span>
+          <span class="route-time">~8–12 min<small>~1,5 km</small></span>
+        </div>
+        <div class="route-item">
+          <span class="route-hotel">Holiday Inn Anhembi<small>Cláudia e Isabela</small></span>
+          <span class="route-time">~30–40 min<small>~13 km</small></span>
+        </div>
+      </div>
+
+      <div class="timeline" style="margin:16px 0 4px;">
+        <div class="t-item"><div class="t-time">11h20</div><div class="t-text">Cláudia e Isabela saem do Holiday Inn Anhembi</div></div>
+        <div class="t-item"><div class="t-time">11h50</div><div class="t-text">Marvin e Felipe saem do Intercity Jardins</div></div>
+        <div class="t-item"><div class="t-time">12h00–12h30</div><div class="t-text">Chegada e mesa (conforme planejado)</div></div>
+        <div class="t-item"><div class="t-time">12h30–14h30</div><div class="t-text">Almoço com calma, sem pressa</div></div>
+      </div>
+
+      <details class="disclosure" open>
+        <summary><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg> Melhores pratos, entradas e drinks</summary>
+        <div class="disclosure-body">
+          <p style="margin:2px 0 8px;"><strong>Entradas</strong></p>
+          <ul>
+            <li>Tartar do dia</li>
+            <li>Batata rústica com trufas e parmesão</li>
+            <li>Salada de brie brûlée</li>
+          </ul>
+          <p style="margin:10px 0 8px;"><strong>Pratos principais</strong></p>
+          <ul>
+            <li>Gnocchi Fritti — assinatura da chef</li>
+            <li>Releitura do Espaguete Carbonara</li>
+          </ul>
+          <p style="margin:10px 0 8px;"><strong>Drinks</strong></p>
+          <ul>
+            <li>Um espumante ou Kir Royale para abrir o almoço, no estilo bistrô francês</li>
+            <li>Vale perguntar a sugestão de vinho por taça do dia — o cardápio muda com frequência</li>
+          </ul>
+          <p style="margin:10px 0 0; font-size:12.5px; color:var(--sage);"><strong>Conselho:</strong> como o serviço é contínuo (sem intervalo entre almoço e jantar), não tem pressa nenhuma para liberar a mesa — aproveitem o horário tranquilo.</p>
+          <p style="margin:4px 0 0; font-size:12.5px; color:var(--sage);">Sem menu executivo aos domingos — só à la carte.</p>
+          <span class="price-tag">≈ R$180–280 por pessoa</span>
+        </div>
+      </details>
+    </div>
+
+    <p class="divider-note">☕ Cerca de 5 horas livres entre o almoço (~14h30) e o jantar (~19h30) — tempo de sobra para descansar ou Cláudia e Isabela voltarem à Bienal.</p>
+
+    <div class="rcard" style="margin-top:20px;">
+      <div class="rcard-top">
+        <div>
+          <h3 class="rcard-name">OUE Sushi</h3>
+          <div class="rcard-cuisine">Chef Anderson Haruo · unidade Shopping Bourbon (Perdizes)</div>
+        </div>
+        <div class="rcard-emoji">🍣</div>
+      </div>
+
+      <div class="meta-row">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21s-7-6.4-7-11.5A7 7 0 0 1 12 2a7 7 0 0 1 7 7.5C19 14.6 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+        <div><span class="lbl2">Endereço</span>Bourbon Shopping São Paulo, Rua Palestra Itália, 500 — Perdizes</div>
+      </div>
+      <div class="meta-row">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        <div><span class="lbl2">Horário</span>Todos os dias, 11h30 às 23h — contínuo</div>
+      </div>
+
+      <div class="confirmed">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>
+        Reserva confirmada · 06/09, 19h30 · 4 pessoas · Oue Bourbon
+      </div>
+
+      <p style="font-size:13.5px; margin-top:10px;"><strong>Por que essa unidade:</strong> das 5 unidades do OUE, é a com melhor equilíbrio de distância para os dois hotéis, bem mais perto que Berrini ou Morumbi para quem vem do norte.</p>
+
+      <div class="routes">
+        <div class="routes-label">🚗 Tempo estimado de Uber até o OUE Sushi</div>
+        <div class="route-item">
+          <span class="route-hotel">Intercity Jardins<small>Marvin e Felipe</small></span>
+          <span class="route-time">~15–20 min<small>~6,5 km</small></span>
+        </div>
+        <div class="route-item">
+          <span class="route-hotel">Holiday Inn Anhembi<small>Cláudia e Isabela</small></span>
+          <span class="route-time">~20–25 min<small>~10,5 km</small></span>
+        </div>
+      </div>
+
+      <div class="table-wrap" style="margin-top:12px;">
+        <table>
+          <thead><tr><th>Menu</th><th>Preço</th><th>Inclui</th></tr></thead>
+          <tbody>
+            <tr><td>Omakase One</td><td>R$129</td><td>Menu completo, sem repetição</td></tr>
+            <tr><td>Omakase Original</td><td>R$219</td><td>Repetições ilimitadas, iguarias clássicas</td></tr>
+            <tr><td><strong>Omakase Especial</strong> ⭐</td><td><strong>R$299</strong></td><td>Tudo do Original + <strong>lagosta e atum Bluefin</strong> à vontade</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:13px; color:var(--sage); margin-top:8px;">O <strong>Omakase Especial</strong> é o único formato com bluefin e lagosta liberados para repetição — exatamente o que o grupo procura. Sobremesa cortesia em todos os formatos.</p>
+
+      <div class="callout gold">
+        <strong>⚠️ Preço da Isabela</strong>
+        Desconto infantil vale só até 11 anos (isenção até 5). Com 12 anos completos, Isabela já paga o valor integral — R$299, igual aos adultos. Total estimado da noite: ≈ R$1.200 para os 4.
+      </div>
+
+      <details class="disclosure" open>
+        <summary><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg> Como aproveitar ao máximo</summary>
+        <div class="disclosure-body">
+          <p>A reserva das <strong>19h30</strong> já está confirmada, com folga confortável após o almoço no D'Heaven. Para chegar todos juntos: Intercity Jardins sai por volta das <strong>19h10</strong>; Holiday Inn Anhembi por volta das <strong>19h05</strong> — os dois trajetos levam a um ponto de chegada bem próximo, por volta das 19h25–19h30.</p>
+          <p style="margin-top:8px;"><strong>Drinks:</strong> vale pedir um saquê para acompanhar. Como regra geral de harmonização, peixes mais gordos como o atum/bluefin combinam com saquês mais encorpados, enquanto peixes brancos pedem versões mais leves e frescas — dá pra ir variando o copo conforme o prato.</p>
+          <p style="margin-top:8px;">Peça o bluefin e a lagosta em porções menores e mais vezes ao longo da refeição, em vez de uma quantidade grande de uma vez — garante peças sempre fresquinhas e dá tempo de intercalar com vieiras, polvo e peixes nobres do menu clássico.</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ===================== SEGUNDA ===================== -->
+  <section class="panel" id="seg">
+    <h2 class="section-heading">Dia 4 · Segunda-feira, 07/09 (feriado)</h2>
+    <p class="section-sub">Almoço de despedida com o grupo todo — depois, direto para Congonhas juntos</p>
+
+    <div class="rcard">
+      <div class="rcard-top">
+        <div>
+          <h3 class="rcard-name">Paparoto Cucina</h3>
+          <div class="rcard-cuisine">Chef Dayse Paparoto · unidade JK Iguatemi</div>
+        </div>
+        <div class="rcard-emoji">🍝</div>
+      </div>
+
+      <div class="meta-row">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21s-7-6.4-7-11.5A7 7 0 0 1 12 2a7 7 0 0 1 7 7.5C19 14.6 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+        <div><span class="lbl2">Endereço</span>Av. Pres. Juscelino Kubitschek, 2041 — Vila Nova Conceição, São Paulo</div>
+      </div>
+      <div class="meta-row">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        <div><span class="lbl2">Horário segunda</span>12h00 às 15h00</div>
+      </div>
+
+      <div class="confirmed">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>
+        Reserva confirmada · 07/09, 12h00 · 4 pessoas · Sala 2
+      </div>
+
+      <p style="font-size:13.5px; margin-top:10px;"><strong>Por que essa unidade:</strong> das três unidades do Paparoto em São Paulo, é a mais perto de Congonhas (~10–15 min de Uber) — reduz o risco de qualquer imprevisto de trânsito no dia do voo.</p>
+
+      <div class="routes">
+        <div class="routes-label">🚗 Tempo estimado de Uber até o Paparoto</div>
+        <div class="route-item">
+          <span class="route-hotel">Intercity Jardins<small>Marvin e Felipe</small></span>
+          <span class="route-time">~15–20 min<small>~5,5 km</small></span>
+        </div>
+        <div class="route-item">
+          <span class="route-hotel">Holiday Inn Anhembi<small>Cláudia e Isabela</small></span>
+          <span class="route-time">~35–45 min<small>~17,5 km</small></span>
+        </div>
+        <div class="route-item">
+          <span class="route-hotel">Paparoto → Congonhas<small>grupo todo — mesmo voo de volta</small></span>
+          <span class="route-time">~10–15 min<small>~6 km</small></span>
+        </div>
+      </div>
+
+      <div class="callout wine">
+        <strong>🧳 Checkout antes do almoço, não depois</strong>
+        Como o grupo todo segue direto do Paparoto para Congonhas, ninguém volta ao hotel depois do almoço — os quatro precisam fazer checkout e levar toda a bagagem <em>antes</em> de sair para o restaurante.
+        <ul style="margin:8px 0 0; padding-left:18px;">
+          <li>Intercity Jardins e Holiday Inn Anhembi: finalizem o checkout e já saiam com as malas rumo ao Paparoto.</li>
+          <li>Avisem o restaurante ao chegar que estão com bagagem — a maioria acomoda malas de mão perto da mesa ou na recepção sem problema.</li>
+          <li>Para o trecho final até Congonhas, com 4 pessoas + bagagem, considerem 1 Uber XL/6 lugares ou dois carros normais — vale já pedir com alguma folga extra pela quantidade de malas.</li>
+        </ul>
+      </div>
+
+      <details class="disclosure" open>
+        <summary><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg> Melhores pratos, entradas e drinks</summary>
+        <div class="disclosure-body">
+          <p style="margin:2px 0 8px;"><strong>Prato principal</strong></p>
+          <ul>
+            <li>Raviolli de gema, com ricota, espinafre e gema de ovo suculenta — o prato mais elogiado da casa</li>
+            <li>Bife Wellington, releitura da casa</li>
+          </ul>
+          <p style="margin:10px 0 8px;"><strong>Drinks</strong></p>
+          <ul>
+            <li>Um Aperol Spritz ou Negroni para abrir o apetite, no clima de trattoria italiana</li>
+            <li>Um tinto italiano estruturado acompanha bem o Bife Wellington</li>
+          </ul>
+          <p style="margin:10px 0 8px;"><strong>Sobremesa</strong></p>
+          <ul>
+            <li>Tiramisù com "árvore" de algodão doce — sobremesa-assinatura, ótima despedida doce da viagem</li>
+          </ul>
+          <p style="margin:10px 0 0; font-size:12.5px; color:var(--sage);"><strong>Conselho:</strong> guardem espaço para o tiramisù — é o prato mais fotografado da casa, e vale terminar a viagem com ele.</p>
+          <span class="price-tag">≈ R$180–280 por pessoa</span>
+        </div>
+      </details>
+    </div>
+
+    <h2 class="section-heading" style="margin-top:24px;">Cronograma até o embarque</h2>
+    <p class="section-sub">Voo de volta às 16h25 — mesmo voo para os 4</p>
+    <div class="timeline">
+      <div class="t-item"><div class="t-time">11h15</div><div class="t-text">Cláudia e Isabela fazem checkout do Holiday Inn Anhembi e saem, já com as malas</div></div>
+      <div class="t-item"><div class="t-time">11h40</div><div class="t-text">Marvin e Felipe fazem checkout do Intercity Jardins e saem, já com as malas</div></div>
+      <div class="t-item"><div class="t-time">12h00</div><div class="t-text">Chegada e mesa, todos com a bagagem</div></div>
+      <div class="t-item"><div class="t-time">12h00–13h45</div><div class="t-text">Almoço tranquilo, ~1h45</div></div>
+      <div class="t-item"><div class="t-time">13h45–14h00</div><div class="t-text">Fechar a conta, sair</div></div>
+      <div class="t-item"><div class="t-time">14h00–14h20</div><div class="t-text">Uber(s) para Congonhas, grupo todo <span class="muted">(~10–15 min, ~6 km)</span></div></div>
+      <div class="t-item"><div class="t-time">14h20</div><div class="t-text">Chegada ao aeroporto, check-in dos 4</div></div>
+      <div class="t-item"><div class="t-time">16h25</div><div class="t-text"><strong>Embarque</strong></div></div>
+    </div>
+  </section>
+
+  <!-- ===================== DICAS ===================== -->
+  <section class="panel" id="dicas">
+    <h2 class="section-heading">Pontos importantes</h2>
+    <p class="section-sub">Marque o que já resolveu antes de embarcar</p>
+
+    <ul class="checklist" id="checklist">
+      <li><span class="cb" role="checkbox" aria-checked="false" tabindex="0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ck-text">Arturito mudou de endereço em 2024 — o certo é Rua Chabad, 124, Jardim Paulista (não mais Pinheiros)</span></li>
+      <li><span class="cb" role="checkbox" aria-checked="false" tabindex="0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ck-text">Leggera não aceita reservas — grupo inteiro precisa chegar junto às 18h de sábado, casa só senta com 100% presentes</span></li>
+      <li><span class="cb" role="checkbox" aria-checked="false" tabindex="0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ck-text">OUE Sushi: Isabela (12 anos) já paga valor integral do omakase — desconto vale só até 11 anos</span></li>
+      <li class="done"><span class="cb checked" role="checkbox" aria-checked="true" tabindex="0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ck-text">Arturito (19h, 4 pessoas), OUE Sushi (19h30, 4 pessoas) e Paparoto (12h, 4 pessoas) já têm reserva confirmada — falta só o D'Heaven, se ainda não fez (via Tagme)</span></li>
+      <li><span class="cb" role="checkbox" aria-checked="false" tabindex="0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ck-text">Domingo de manhã: se a Bienal estiver cheia, reserve margem extra para o Uber de Cláudia e Isabela até o D'Heaven</span></li>
+      <li><span class="cb" role="checkbox" aria-checked="false" tabindex="0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ck-text">Anhembi fica bem mais longe de tudo do que os Jardins (30–45 min contra 8–20 min) — Cláudia e Isabela quase sempre precisam sair bem antes de Marvin e Felipe</span></li>
+      <li><span class="cb" role="checkbox" aria-checked="false" tabindex="0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ck-text">Confirmar o número do voo de volta (CGH → CWB) no bilhete — todos os 4 embarcam juntos, foi inferido a partir da ida</span></li>
+      <li><span class="cb" role="checkbox" aria-checked="false" tabindex="0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ck-text">Segunda-feira: como todos voltam juntos, checkout dos dois hotéis e bagagem têm que estar prontos antes de sair para o Paparoto — ninguém volta ao hotel depois do almoço</span></li>
+      <li><span class="cb" role="checkbox" aria-checked="false" tabindex="0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ck-text">Pedir Uber XL (ou dois carros) para o trecho Paparoto → Congonhas, já que são 4 pessoas com bagagem</span></li>
+      <li><span class="cb" role="checkbox" aria-checked="false" tabindex="0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ck-text">Segunda-feira: sair do Paparoto até 14h00 mesmo que a conversa esteja boa — feriado costuma ter mais movimento em Congonhas</span></li>
+      <li><span class="cb" role="checkbox" aria-checked="false" tabindex="0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ck-text">Horários e cardápios foram confirmados nas fontes oficiais, mas vale uma conferida rápida no Instagram de cada casa na semana da viagem</span></li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>Roteiro pesquisado e organizado para a viagem de setembro de 2026 · Bom apetite 🇮🇹🍣🥐🍕</footer>
+
+<script>
+  // ---- tab switching ----
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+  function showPanel(id){
+    panels.forEach(p => p.classList.toggle('active', p.id === id));
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.panel === id));
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  tabs.forEach(t => t.addEventListener('click', () => showPanel(t.dataset.panel)));
+  document.querySelectorAll('.qn-card').forEach(c => c.addEventListener('click', () => showPanel(c.dataset.goto)));
+
+  // ---- countdown ----
+  function updateCountdown(){
+    const tripStart = new Date('2026-09-04T00:00:00-03:00');
+    const tripEnd   = new Date('2026-09-08T00:00:00-03:00');
+    const now = new Date();
+    const el = document.getElementById('countdown');
+    if (!el) return;
+    if (now < tripStart){
+      const diffDays = Math.ceil((tripStart - now) / (1000*60*60*24));
+      el.textContent = diffDays === 1 ? '✈️ Falta 1 dia para a viagem' : `✈️ Faltam ${diffDays} dias para a viagem`;
+    } else if (now < tripEnd){
+      el.textContent = '🍽️ Boa viagem! O roteiro está em andamento.';
+    } else {
+      el.textContent = '🎉 Viagem concluída — esperamos que tenha sido incrível!';
+    }
+  }
+  updateCountdown();
+
+  // ---- checklist ----
+  document.querySelectorAll('.cb').forEach(cb => {
+    function toggle(){
+      const checked = cb.classList.toggle('checked');
+      cb.setAttribute('aria-checked', checked);
+      cb.closest('li').classList.toggle('done', checked);
+    }
+    cb.addEventListener('click', toggle);
+    cb.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }});
+  });
+</script>
+
+</body>
+</html>
